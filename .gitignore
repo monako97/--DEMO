@@ -1,5 +1,6 @@
 node_modules
-# dist
+dist
+out
 .idea
 .vscode
 .git
