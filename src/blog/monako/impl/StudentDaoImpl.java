@@ -3,11 +3,13 @@ package blog.monako.impl;
 import blog.monako.dao.StudentDao;
 import blog.monako.domain.Student;
 import blog.monako.util.JDBCUtil;
+import blog.monako.util.TextUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -84,5 +86,27 @@ public class StudentDaoImpl implements StudentDao {
         String sql = "SELECT * FROM student WHERE id = ?";
         return queryRunner.query(sql,new BeanHandler<Student>(Student.class),id);
     }
+    /**
+     * 模糊查询
+     * @param name 按姓名搜索
+     * @param gender 按性别搜索
+     * @throws SQLException
+     **/
+    @Override
+    public List<Student> searchStudent(String name, String gender) throws SQLException {
+        QueryRunner queryRunner = new QueryRunner(JDBCUtil.getDataSource());
+        String sql = "SELECT * FROM student WHERE 1 = 1";
+        List<String> list = new ArrayList<String>();
+        if (!TextUtils.isEmpty(name)){
+            sql = sql + " AND name like ?";
+            list.add("%" + name + "%");
+        }
 
+        if (!TextUtils.isEmpty(gender)){
+            sql = sql + " AND gender = ?";
+            list.add(gender);
+        }
+        System.out.println(name+" - "+gender);
+        return queryRunner.query(sql,new BeanListHandler<Student>(Student.class),list.toArray());
+    }
 }

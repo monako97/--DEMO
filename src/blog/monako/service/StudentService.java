@@ -39,4 +39,11 @@ public interface StudentService {
      * @throws SQLException
      **/
     Student userInfo(int id)throws SQLException;
+    /**
+     * 模糊查询
+     * @param name 按姓名搜索
+     * @param gender 按性别搜索
+     * @throws SQLException
+     **/
+    List<Student> searchStudent(String name,String gender)throws SQLException;
 }
