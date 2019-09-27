@@ -1,5 +1,6 @@
 package blog.monako.service;
 
+import blog.monako.domain.PageBean;
 import blog.monako.domain.Student;
 
 import java.sql.SQLException;
@@ -10,6 +11,13 @@ import java.util.List;
  * @author monako
  **/
 public interface StudentService {
+    /**
+     * 分页查询当页学生
+     * @param currentPage 需要返回的页数
+     * @return List<Student>
+     * @throws SQLException
+     **/
+    PageBean findStudentByPage(int currentPage) throws SQLException;
     /**
      * 查询所有学生
      * @return List<Student>

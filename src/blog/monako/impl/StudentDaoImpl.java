@@ -7,6 +7,7 @@ import blog.monako.util.TextUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,6 +18,33 @@ import java.util.List;
  * @author monako
  **/
 public class StudentDaoImpl implements StudentDao {
+    /**
+     * 查询总学生记录数
+     * @return
+     * @throws SQLException
+     **/
+    @Override
+    public int findCount() throws SQLException {
+        QueryRunner queryRunner = new QueryRunner((JDBCUtil.getDataSource()));
+        Long count = (Long)queryRunner.query("SELECT COUNT(*) FROM student",
+                new ScalarHandler());
+        return count.intValue();
+    }
+    /**
+     * 分页查询当页学生
+     * @param currentPage 需要返回的页数
+     * @return List<Student>
+     * @throws SQLException
+     **/
+    @Override
+    public List<Student> findStudentByPage(int currentPage) throws SQLException {
+        QueryRunner queryRunner = new QueryRunner(JDBCUtil.getDataSource());
+        // LIMIT: 一页返回多少条；OFFSET: 跳过前面的多少页
+        String sql = "SELECT * FROM student LIMIT ? OFFSET ?";
+        return queryRunner.query(sql,
+                new BeanListHandler<Student>(Student.class),PAGE_SIZE,(currentPage-1)*PAGE_SIZE);
+    }
+
     /**
      * 添加学生
      * @param student 需要添加到数据库的学生对象

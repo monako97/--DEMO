@@ -10,6 +10,20 @@ import java.util.List;
  * @author monako
  **/
 public interface StudentDao {
+    int PAGE_SIZE = 3; //一页显示多少条
+    /**
+     * 分页查询当页学生
+     * @param currentPage 需要返回的页数
+     * @return List<Student>
+     * @throws SQLException
+     **/
+    List<Student> findStudentByPage(int currentPage) throws SQLException;
+    /**
+     * 查询总学生记录数
+     * @return
+     * @throws SQLException
+     **/
+    int findCount() throws SQLException;
     /**
      * 查询所有学生
      * @return List<Student>
